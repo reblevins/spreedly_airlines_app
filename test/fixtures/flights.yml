@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  flight_number: MyString
+  origin_id: 1
+  destination_id: 1
+  start_time: 2021-07-13 14:29:41
+  duration: 1
+  price: 1.5
+
+two:
+  flight_number: MyString
+  origin_id: 1
+  destination_id: 1
+  start_time: 2021-07-13 14:29:41
+  duration: 1
+  price: 1.5

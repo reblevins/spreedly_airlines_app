@@ -1,0 +1,101 @@
+<% if @errors %>
+  <pre>
+    <%= @errors %>
+  </pre>
+<% else %>
+  <%= form_with(model: [@flight, @booking], id: 'payment-form', local: true) do |form| %>
+    <%= form.hidden_field :flight_id, value: @flight.id %>
+    <%= form.hidden_field :payment_method_token, id: 'payment_method_token' %>
+    
+    <% if booking.errors.any? %>
+      <ul id="error_explanation">
+      <% booking.errors.full_messages.each do |message| %>
+        <li><i class="fas fa-exclamation-triangle"></i><span><%= message %></span></li>
+      <% end %>
+      </ul>
+    <% end %>
+
+    <div class="field">
+      <%= form.label :flight_number %>
+      <%= @flight.flight_number %>
+    </div>
+
+    <div class="field">
+      <%= form.label :first_name %>
+      <%= form.text_field :first_name %>
+    </div>
+
+    <div class="field">
+      <%= form.label :last_name %>
+      <%= form.text_field :last_name %>
+    </div>
+
+    <div class="field">
+      <%= form.label :price %>
+      <%= number_to_currency(@flight.price) %>
+    </div>
+
+    <div class="field">
+      <select name="booking[payment_method_id]" id="payment_method_id">
+        <option value="" selected>New Payment Method</option>
+        <% if @payment_methods %>
+          <% @payment_methods.each do |payment_method| %>
+            <% if payment_method.class == Hash %>
+              <option value="<%= payment_method['payment_method_id'] %>"><%= payment_method['full_name'] %> - <%= payment_method['card_type'].upcase %> ending in ***<%= payment_method['last_four_digits'] %></option>
+            <% end %>
+          <% end %>
+        <% end %>
+      </select>
+    </div>
+
+    <div id="retain_on_success" class="field">
+      <label>Save payment method <input type="checkbox" name="booking[retain_on_success]" value="retain"></label>
+    </div>
+
+    <div class="field">
+      <label>Book with Expedia PMD <input type="checkbox" name="booking[expedia]" value="true"></label>
+    </div>
+
+    <div class="actions">
+      <%# <%= form.submit %>
+      <input type="button" id="submit_button" value="Enter Payment Info">
+    </div>
+  <% end %>
+<% end %>
+
+<script>
+var tokenField = document.getElementById("payment_method_token")
+var submitButton = document.getElementById("submit_button")
+var paymentMethodIdSelect = document.getElementById('payment_method_id')
+var retainOnSuccessInput = document.getElementById('retain_on_success')
+var masterForm = document.getElementById('payment-form')
+
+paymentMethodIdSelect.addEventListener("change", (event) => {
+  if (event.target.value == "") {
+    submitButton.value = "Enter Payment Info"
+    retainOnSuccessInput.classList.remove("hidden")
+  } else {
+    submitButton.value = "Book This Flight"
+    retainOnSuccessInput.classList.add("hidden")
+  }
+})
+
+submitButton.addEventListener("click", (event) => {
+  if (paymentMethodIdSelect.value == "") {
+    SpreedlyExpress.init("OYc5JMuI0BSG3IGoNsNsk8rFv1W", {
+      "amount": "<%= number_to_currency(@flight.price) %>",
+      "company_name": "Spreedly Airlines",
+      "full_name": "Rod Blev"
+    })
+    SpreedlyExpress.openView()
+  } else {
+    masterForm.submit()
+  }
+})
+
+SpreedlyExpress.onPaymentMethod(function(token, paymentMethod) {
+  tokenField.setAttribute("value", token)
+
+  masterForm.submit()
+})
+</script>

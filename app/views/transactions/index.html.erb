@@ -1,0 +1,35 @@
+<h1>Transaction History</h1>
+<p id="notice"><%= notice %></p>
+<table class="transactions">
+  <thead>
+    <tr>
+      <th></th>
+      <th>Name</th>
+      <th>Card Number</th>
+      <th>Amount</th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @transactions.each do |transaction| %>
+      <tr<% if transaction[:refunded] %> class="refunded"<% end %>>
+        <td><span class="status-circle"></span></td>
+        <td>
+          <% if transaction['payment_method'] %>
+            <%= transaction['payment_method']['full_name'] %>
+          <% end %>
+        </td>
+        <td>
+          <% if transaction['payment_method'] %>
+            ***<%= transaction['payment_method']['last_four_digits'] %>
+          <% end %>
+        </td>
+        <td>Amount: <%= number_to_currency(transaction['amount'].to_i / 100) if transaction['amount'] %><br></td>
+        <td class="controls">
+          <%= link_to 'Delete', transaction_path(transaction), method: :delete %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

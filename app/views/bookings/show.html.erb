@@ -1,0 +1,39 @@
+<h1>Booking for <%= @booking.first_name %> <%= @booking.last_name %><% if @booking.canceled %> <span class="canceled">canceled</span><% end %></h1>
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Flight:</strong>
+  <%= @booking.flight.flight_number %>
+</p>
+
+<p>
+  <strong>From:</strong>
+  <%= @booking.flight.origin.city %> (<%= @booking.flight.origin.code %>)
+</p>
+
+<p>
+  <strong>To:</strong>
+  <%= @booking.flight.destination.city %> (<%= @booking.flight.destination.code %>)
+</p>
+
+<p>
+  <strong>Date:</strong>
+  <%= @booking.flight.formatted_date %>
+</p>
+
+<p>
+  <strong>Passenger name:</strong>
+  <%= @booking.last_name %>, <%= @booking.first_name %>
+</p>
+
+<p>
+  <strong>Payment:</strong><% if @full_transaction['refunded'] %> <span class="refunded">refunded</span><% end %><br>
+  Amount: <%= number_to_currency(@full_transaction['amount'] / 100) if @full_transaction['amount'] %><br>
+  <% if @full_transaction['payment_method'] %>
+    Name: <%= @full_transaction['payment_method']['full_name'] %><br>
+    Card: <%= @full_transaction['payment_method']['card_type'].upcase %> ending in ***<%= @full_transaction['payment_method']['last_four_digits'] %><br>
+  <% end %>
+</p>
+
+<% if !@booking.canceled %><%= link_to 'Cancel', flight_booking_path(@booking.flight, @booking), :method=> :patch %><% end %>
+<%= link_to 'Back', bookings_path %>

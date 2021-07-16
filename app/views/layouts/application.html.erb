@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Spreedly Airlines</title>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+    <script src="https://core.spreedly.com/iframe/express-2.min.js"></script>
+    <!-- <script src="https://core.spreedly.com/iframe/iframe-v1.min.js"></script> -->
+    <script src="https://kit.fontawesome.com/4e450351ff.js" crossorigin="anonymous"></script>
+  </head>
+
+  <body>
+    <header>
+      <h1><%= link_to "Spreedly Airlines", "/" %></h1>
+      <ul class="nav">
+        <li><%= link_to "Book a Flight", flights_path %></li>
+        <li><%= link_to "Bookings", bookings_path %></li>
+        <li><%= link_to "Transaction History", transactions_path %></li>
+      </ul>
+    </header>
+    <div class="content">
+      <%= yield %>
+    </div>
+  </body>
+
+</html>

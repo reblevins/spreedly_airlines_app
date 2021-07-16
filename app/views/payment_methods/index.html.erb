@@ -1,0 +1,25 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Payment Methods</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th>Token</th>
+      <th>Last four</th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @payment_methods.each do |payment_method| %>
+      <tr>
+        <td><%= payment_method.id %></td>
+        <td><%= payment_method.token %></td>
+        <td><%= payment_method.last_four_digits %></td>
+        <td><%= link_to 'Destroy', payment_method_path(payment_method), method: :delete %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
